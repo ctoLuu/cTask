@@ -5,6 +5,7 @@ Food food;
 Obstacle obstacle;
 char now_Dir = RIGHT;
 char direction = RIGHT;
+int score = 0;
 
 int Menu()
 {
@@ -17,6 +18,8 @@ int Menu()
 	GotoXY(43, 18);
 	printf("3、关于");
 	GotoXY(43, 20);
+	printf("4、排行");
+	GotoXY(43, 22);
 	printf("其他任意键退出游戏");
 	Hide();
 	char ch;
@@ -33,7 +36,9 @@ int Menu()
 	case '3':
 		result = 3;
 		break;
-
+	case '4':
+		result = 4;
+		break;
 	}
 	system("cls");
 	return result;
@@ -90,8 +95,8 @@ void InitMap()
 	snake.snakeNode[0].y = MAP_HEIGHT / 2 - 1;
 	GotoXY(snake.snakeNode[0].x, snake.snakeNode[0].y);
 	printf("@");
-	snake.length = 3;
-	snake.speed = 250;
+	snake.length = 10;
+	snake.speed = 100;
 	now_Dir = RIGHT;
 	for (int i = 1; i < snake.length; i++) {
 		snake.snakeNode[i].y = snake.snakeNode[i - 1].y;
@@ -221,14 +226,17 @@ int MoveSnake()
 	else {
 		PrintFood();
 		GotoXY(105, 5);
-		printf("当前得分：%d", snake.length - 3);
+		score = snake.length - 3;
+		printf("当前得分：%d", score);
 
 	}
 	if (!IsCorrect())
 	{
 		system("cls");
+		Recordeddata();
 		GotoXY(45, 14);
-		printf("最终得分：%d", snake.length - 3);
+		score = snake.length - 3;
+		printf("最终得分：%d", score);
 		GotoXY(45, 16);
 		printf("你输了！");
 		GotoXY(45, 18);
@@ -254,9 +262,10 @@ int IsCorrect()
 				GotoXY(snake.snakeNode[j].x, snake.snakeNode[j].y);
 				printf(" ");
 			}
-			snake.length = i - 1;
+			snake.length = i;
 			GotoXY(105, 5);
-			printf("当前得分：%d", snake.length - 3);
+			score = snake.length - 3;
+			printf("当前得分：%d", score);
 			return 1;
 		}
 
@@ -296,6 +305,69 @@ void SpeedControl()
 		break;
 	}
 }
+
+void Recordeddata()   //保存成绩
+{
+	time_t timep;
+	struct tm* ti;
+	time(&timep);
+	ti = localtime(&timep);              //获取系统时间
+	record* gdata = (record*)malloc(sizeof(record));
+	gdata->year = ti->tm_year;//年
+	gdata->mon = ti->tm_mon;  //月
+	gdata->day = ti->tm_mday; //日
+	gdata->hour = ti->tm_hour;//时
+	gdata->min = ti->tm_min;  //分
+	gdata->sec = ti->tm_sec;  //秒
+	gdata->fraction = score;
+	FILE* fp = fopen("out.txt", "ab");
+	if (fp == NULL)
+		fp = fopen("out.txt", "wb");
+	fwrite(gdata, sizeof(record), 1, fp);
+	fclose(fp);         //删除文件指针
+	free(gdata);
+}
+
+
+int Cmpfunc(const void* a, const void* b)
+{
+	return(*(int*)b - *(int*)a);//降序排序
+}
+
+void Rankinglist()   //排行榜显示
+{
+	system("cls");
+	int i = 0;
+	record gdata[1000];
+	FILE* fp = fopen("out.txt", "rb");
+	if (fp == NULL)
+	{
+		GotoXY(56, 12);
+		printf("暂无记录");
+		return;
+	}
+	rewind(fp);
+	while (!feof(fp))                           //feof检查文件是否结束，遇到结束符，返回非零
+	{
+		fread(&gdata[i], sizeof(struct record), 1, fp);
+		i++;
+	}
+	qsort(gdata, i - 1, sizeof(record), Cmpfunc);//按得分排序
+	GotoXY(52, 3);
+	printf("排行榜");
+	GotoXY(42, 5);
+	printf("得分\t\t\t时间\n");
+	for (int j = 0; j < i - 1; j++)                     //总共有i-1条记录信息
+	{
+		GotoXY(43, 7 + j * 2);
+		printf("%d\t\t", gdata[j].fraction);
+		printf("%d/%02d/%02d ", gdata[j].year + 1900, gdata[j].mon + 1, gdata[j].day);
+		printf("%02d:%02d:%02d\n", gdata[j].hour, gdata[j].min, gdata[j].sec);
+	}
+	fclose(fp);                               //删除文件指针
+}
+
+
 int main()
 {
 	srand((unsigned int)time(0));
@@ -312,6 +384,9 @@ int main()
 			break;
 		case 3:
 			About();
+			break;
+		case 4:
+			Rankinglist();
 			break;
 		case 0:
 			end = 0;
