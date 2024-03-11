@@ -67,17 +67,19 @@ void About()
 }
 void Help()
 {
-	GotoXY(40, 12);
+	GotoXY(40, 6);
 	printf("w 上");
-	GotoXY(40, 14);
+	GotoXY(40, 8);
 	printf("s 下");
-	GotoXY(40, 16);
+	GotoXY(40, 10);
 	printf("a 左");
-	GotoXY(40, 18);
+	GotoXY(40, 12);
 	printf("d 右");
-	GotoXY(40, 20);
+	GotoXY(40, 14);
+	printf("p 暂停");
+	GotoXY(40, 16);
 	printf("当蛇撞到障碍物时游戏结束");
-	GotoXY(45, 22);
+	GotoXY(45, 18);
 	printf("按任意键返回上级目录");
 	Hide();
 	char ch = _getch();
