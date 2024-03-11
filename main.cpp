@@ -379,8 +379,7 @@ int MoveSnake()
 		system("cls");
 		Recordeddata();
 		GotoXY(45, 14);
-		score = snake.length - 3;
-		printf("最终得分：%d", score);
+		printf("最终得分：%d", snake.length - 3);
 		GotoXY(45, 16);
 		printf("你输了！");
 		GotoXY(45, 18);
@@ -470,7 +469,7 @@ void Recordeddata()   //保存成绩
 	gdata->hour = ti->tm_hour;//时
 	gdata->min = ti->tm_min;  //分
 	gdata->sec = ti->tm_sec;  //秒
-	gdata->fraction = score;
+	gdata->fraction = snake.length - 3;
 	FILE* fp = fopen("out.txt", "ab");
 	if (fp == NULL)
 		fp = fopen("out.txt", "wb");
