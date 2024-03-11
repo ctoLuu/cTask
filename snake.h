@@ -20,6 +20,17 @@ typedef struct {
 
 }Snake;
 
+typedef struct record    //记录
+{
+	int fraction;        //分数z
+	int hour;
+	int min;
+	int sec;
+	int year;
+	int mon;
+	int day;
+}record;
+
 void GotoXY(int, int);
 void Hide();
 int Menu();
@@ -31,3 +42,6 @@ void PrintObstacle();
 int MoveSnake();
 int IsCorrect();
 void SpeedControl();
+void Recordeddata();   //保存成绩
+void Rankinglist();   //排行榜
+int Cmpfunc(const void* a, const void* b);
