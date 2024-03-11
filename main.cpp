@@ -7,6 +7,7 @@ char now_Dir = RIGHT;
 char direction = RIGHT;
 int obs_num = 0;
 int junk_food_num = 0;
+int top = 0;
 
 int Menu()
 {
@@ -122,6 +123,25 @@ void InitMap()
 	PrintFood();
 	GotoXY(105, 5);
 	printf("当前得分：00");
+	int i = 0;
+	record gdata[1000];
+	FILE* fp = fopen("out.txt", "rb");
+	if (fp == NULL)
+	{
+		GotoXY(105, 7);
+		printf("暂无记录");
+		return;
+	}
+	rewind(fp);
+	while (!feof(fp))                           //feof检查文件是否结束，遇到结束符，返回非零
+	{
+		fread(&gdata[i], sizeof(struct record), 1, fp);
+		i++;
+	}
+	qsort(gdata, i - 1, sizeof(record), Cmpfunc);//按得分排序
+	top = gdata[0].fraction;
+	GotoXY(105, 7);
+	printf("最高得分：%d", top);
 }
 void PrintObstacle()
 {
@@ -372,6 +392,16 @@ int MoveSnake()
 		else
 			printf("当前得分：%d", snake.length - 3);
 	}
+	char key;
+	if (direction == 'p') {
+		while (1) {
+			if ((key = _getch()) == 'p') {
+				key = 0;
+				direction = 0;
+				break;
+			}
+		}
+	}
 	if (!IsCorrect())
 	{
 		obs_num = 0;
@@ -379,8 +409,7 @@ int MoveSnake()
 		system("cls");
 		Recordeddata();
 		GotoXY(45, 14);
-		score = snake.length - 3;
-		printf("最终得分：%d", score);
+		printf("最终得分：%d", snake.length - 3);
 		GotoXY(45, 16);
 		printf("你输了！");
 		GotoXY(45, 18);
@@ -470,7 +499,7 @@ void Recordeddata()   //保存成绩
 	gdata->hour = ti->tm_hour;//时
 	gdata->min = ti->tm_min;  //分
 	gdata->sec = ti->tm_sec;  //秒
-	gdata->fraction = score;
+	gdata->fraction = snake.length - 3;
 	FILE* fp = fopen("out.txt", "ab");
 	if (fp == NULL)
 		fp = fopen("out.txt", "wb");
@@ -504,6 +533,7 @@ void Rankinglist()   //排行榜显示
 		i++;
 	}
 	qsort(gdata, i - 1, sizeof(record), Cmpfunc);//按得分排序
+	top = gdata[0].fraction;
 	i = i > 8 ? 8 : i;
 	GotoXY(52, 3);
 	printf("排行榜");
