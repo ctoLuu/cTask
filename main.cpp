@@ -5,27 +5,23 @@ Food food, junk_food[5], all_junk_food[1000];
 Obstacle row_obstacle[5], col_obstacle[5], all_obstacle[40];
 char now_Dir = RIGHT;
 char direction = RIGHT;
-<<<<<<< HEAD
 int obs_num = 0;
 int junk_food_num = 0;
-=======
-int score = 0;
->>>>>>> origin/NewSnake
 
 int Menu()
 {
 	GotoXY(40, 12);
 	printf("欢迎来到贪吃蛇小游戏");
 	GotoXY(43, 14);
-	printf("1、开始游�?);
+	printf("1、开始游戏");
 	GotoXY(43, 16);
-	printf("2、帮�?);
+	printf("2、帮助");
 	GotoXY(43, 18);
-	printf("3、关�?);
+	printf("3、关于");
 	GotoXY(43, 20);
-	printf("4、排�?);
+	printf("4、排行");
 	GotoXY(43, 22);
-	printf("其他任意键退出游�?);
+	printf("其他任意键退出游戏");
 	Hide();
 	char ch;
 	int result = 0;
@@ -68,7 +64,7 @@ void About()
 	GotoXY(30, 12);
 	printf("综合实践案例");
 	GotoXY(43, 14);
-	printf("贪吃蛇游�?);
+	printf("贪吃蛇游戏");
 	GotoXY(43, 16);
 	printf("按任意键返回上级目录");
 	Hide();
@@ -78,13 +74,13 @@ void About()
 void Help()
 {
 	GotoXY(40, 12);
-	printf("w �?);
+	printf("w 上");
 	GotoXY(40, 14);
-	printf("s �?);
+	printf("s 下");
 	GotoXY(40, 16);
-	printf("a �?);
+	printf("a 左");
 	GotoXY(40, 18);
-	printf("d �?);
+	printf("d 右");
 	GotoXY(40, 20);
 	printf("当蛇撞到障碍物时游戏结束");
 	GotoXY(45, 22);
@@ -100,13 +96,8 @@ void InitMap()
 	snake.snakeNode[0].y = MAP_HEIGHT / 2 - 1;
 	GotoXY(snake.snakeNode[0].x, snake.snakeNode[0].y);
 	printf("@");
-<<<<<<< HEAD
 	snake.length = 3;
 	snake.speed = 150;
-=======
-	snake.length = 10;
-	snake.speed = 100;
->>>>>>> origin/NewSnake
 	now_Dir = RIGHT;
 	for (int i = 1; i < snake.length; i++) {
 		snake.snakeNode[i].y = snake.snakeNode[i - 1].y;
@@ -123,18 +114,14 @@ void InitMap()
 	for (int i = 1; i < MAP_WIDTH - 1; i++)
 	{
 		GotoXY(i, 0);
-		printf("�?);
+		printf("—");
 		GotoXY(i, MAP_HEIGHT - 1);
-		printf("�?);
+		printf("—");
 	}
 	PrintObstacle();
 	PrintFood();
 	GotoXY(105, 5);
-<<<<<<< HEAD
-	printf("��ǰ�÷֣�00");
-=======
-	printf("当前得分�?");
->>>>>>> origin/NewSnake
+	printf("当前得分：00");
 }
 void PrintObstacle()
 {
@@ -354,22 +341,22 @@ int MoveSnake()
 							junk_food_num = 0;
 							system("cls");
 							GotoXY(45, 14);
-							printf("���յ÷֣�%d", snake.length - 3);
+							printf("最终得分：%d", snake.length - 3);
 							GotoXY(45, 16);
-							printf("Your Snake Died��");
+							printf("Your Snake Died！");
 							GotoXY(45, 18);
-							printf("��������������˵�");
+							printf("按任意键返回主菜单");
 							char c = _getch();
 							system("cls");
 							return 0;
 						}
-						printf("��ǰ�÷֣�%d", snake.length - 3);
+						printf("当前得分：%d", snake.length - 3);
 					}
 					else
-						printf("��ǰ�÷֣�0%d", snake.length - 3);
+						printf("当前得分：0%d", snake.length - 3);
 				}
 				else {
-					printf("��ǰ�÷֣�%d", snake.length - 3);
+					printf("当前得分：%d", snake.length - 3);
 				}
 				break;
 				
@@ -379,17 +366,11 @@ int MoveSnake()
 	else {
 		PrintFood();
 		GotoXY(105, 5);
-<<<<<<< HEAD
 		if (snake.length - 3 < 10) {
-			printf("��ǰ�÷֣�0%d", snake.length - 3);
+			printf("当前得分：0%d", snake.length - 3);
 		}
 		else
-			printf("��ǰ�÷֣�%d", snake.length - 3);
-=======
-		score = snake.length - 3;
-		printf("当前得分�?d", score);
-
->>>>>>> origin/NewSnake
+			printf("当前得分：%d", snake.length - 3);
 	}
 	if (!IsCorrect())
 	{
@@ -403,7 +384,7 @@ int MoveSnake()
 		GotoXY(45, 16);
 		printf("你输了！");
 		GotoXY(45, 18);
-		printf("按任意键返回主菜�?);
+		printf("按任意键返回主菜单");
 		char c = _getch();
 		system("cls");
 		return 0;
@@ -431,16 +412,11 @@ int IsCorrect()
 			}
 			snake.length = i;
 			GotoXY(105, 5);
-<<<<<<< HEAD
 			if (snake.length - 3 < 10) {
-				printf("��ǰ�÷֣�0%d", snake.length - 3);
+				printf("当前得分：0%d", snake.length - 3);
 			}
 			else
-				printf("��ǰ�÷֣�%d", snake.length - 3);
-=======
-			score = snake.length - 3;
-			printf("当前得分�?d", score);
->>>>>>> origin/NewSnake
+				printf("当前得分：%d", snake.length - 3);
 			return 1;
 		}
 
@@ -488,12 +464,12 @@ void Recordeddata()   //保存成绩
 	time(&timep);
 	ti = localtime(&timep);              //获取系统时间
 	record* gdata = (record*)malloc(sizeof(record));
-	gdata->year = ti->tm_year;//�?
-	gdata->mon = ti->tm_mon;  //�?
-	gdata->day = ti->tm_mday; //�?
-	gdata->hour = ti->tm_hour;//�?
-	gdata->min = ti->tm_min;  //�?
-	gdata->sec = ti->tm_sec;  //�?
+	gdata->year = ti->tm_year;//年
+	gdata->mon = ti->tm_mon;  //月
+	gdata->day = ti->tm_mday; //日
+	gdata->hour = ti->tm_hour;//时
+	gdata->min = ti->tm_min;  //分
+	gdata->sec = ti->tm_sec;  //秒
 	gdata->fraction = score;
 	FILE* fp = fopen("out.txt", "ab");
 	if (fp == NULL)
@@ -509,7 +485,7 @@ int Cmpfunc(const void* a, const void* b)
 	return(*(int*)b - *(int*)a);//降序排序
 }
 
-void Rankinglist()   //排行榜显�?
+void Rankinglist()   //排行榜显示
 {
 	system("cls");
 	int i = 0;
@@ -527,14 +503,14 @@ void Rankinglist()   //排行榜显�?
 		fread(&gdata[i], sizeof(struct record), 1, fp);
 		i++;
 	}
-	qsort(gdata, i - 1, sizeof(record), Cmpfunc);//按得分排�?
+	qsort(gdata, i - 1, sizeof(record), Cmpfunc);//按得分排序
 	i = i > 8 ? 8 : i;
 	GotoXY(52, 3);
-	printf("排行�?);
+	printf("排行榜");
 	GotoXY(42, 5);
 	printf("得分\t\t\t时间\n");
 	int j;
-	for (j = 0; j < i - 1; j++)                     //总共有i-1条记录信�?
+	for (j = 0; j < i - 1; j++)                     //总共有i-1条记录信息
 	{
 		GotoXY(43, 7 + j * 2);
 		printf("%d\t\t", gdata[j].fraction);
