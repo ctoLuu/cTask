@@ -357,7 +357,8 @@ void Rankinglist()   //排行榜显示
 	printf("排行榜");
 	GotoXY(42, 5);
 	printf("得分\t\t\t时间\n");
-	for (int j = 0; j < i - 1; j++)                     //总共有i-1条记录信息
+	int j;
+	for (j = 0; j < i - 1; j++)                     //总共有i-1条记录信息
 	{
 		GotoXY(43, 7 + j * 2);
 		printf("%d\t\t", gdata[j].fraction);
@@ -365,6 +366,11 @@ void Rankinglist()   //排行榜显示
 		printf("%02d:%02d:%02d\n", gdata[j].hour, gdata[j].min, gdata[j].sec);
 	}
 	fclose(fp);                               //删除文件指针
+	GotoXY(43, 9 + j * 2);
+	printf("按任意键返回上级目录");
+	Hide();
+	char ch = _getch();
+	system("cls");
 }
 
 

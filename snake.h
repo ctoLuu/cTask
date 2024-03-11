@@ -22,7 +22,7 @@ typedef struct {
 
 typedef struct record    //记录
 {
-	int fraction;        //分数
+	int fraction;        //分数z
 	int hour;
 	int min;
 	int sec;
