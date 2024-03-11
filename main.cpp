@@ -10,17 +10,17 @@ int score = 0;
 int Menu()
 {
 	GotoXY(40, 12);
-	printf("»¶Ó­À´µ½Ì°³ÔÉßĞ¡ÓÎÏ·");
+	printf("æ¬¢è¿æ¥åˆ°è´ªåƒè›‡å°æ¸¸æˆ");
 	GotoXY(43, 14);
-	printf("1¡¢¿ªÊ¼ÓÎÏ·");
+	printf("1ã€å¼€å§‹æ¸¸æˆ");
 	GotoXY(43, 16);
-	printf("2¡¢°ïÖú");
+	printf("2ã€å¸®åŠ©");
 	GotoXY(43, 18);
-	printf("3¡¢¹ØÓÚ");
+	printf("3ã€å…³äº");
 	GotoXY(43, 20);
-	printf("4¡¢ÅÅĞĞ");
+	printf("4ã€æ’è¡Œ");
 	GotoXY(43, 22);
-	printf("ÆäËûÈÎÒâ¼üÍË³öÓÎÏ·");
+	printf("å…¶ä»–ä»»æ„é”®é€€å‡ºæ¸¸æˆ");
 	Hide();
 	char ch;
 	int result = 0;
@@ -61,11 +61,11 @@ void Hide()
 void About()
 {
 	GotoXY(30, 12);
-	printf("×ÛºÏÊµ¼ù°¸Àı");
+	printf("ç»¼åˆå®è·µæ¡ˆä¾‹");
 	GotoXY(43, 14);
-	printf("Ì°³ÔÉßÓÎÏ·");
+	printf("è´ªåƒè›‡æ¸¸æˆ");
 	GotoXY(43, 16);
-	printf("°´ÈÎÒâ¼ü·µ»ØÉÏ¼¶Ä¿Â¼");
+	printf("æŒ‰ä»»æ„é”®è¿”å›ä¸Šçº§ç›®å½•");
 	Hide();
 	char ch = _getch();
 	system("cls");
@@ -73,17 +73,17 @@ void About()
 void Help()
 {
 	GotoXY(40, 12);
-	printf("w ÉÏ");
+	printf("w ä¸Š");
 	GotoXY(40, 14);
-	printf("s ÏÂ");
+	printf("s ä¸‹");
 	GotoXY(40, 16);
-	printf("a ×ó");
+	printf("a å·¦");
 	GotoXY(40, 18);
-	printf("d ÓÒ");
+	printf("d å³");
 	GotoXY(40, 20);
-	printf("µ±Éß×²µ½ÕÏ°­ÎïÊ±ÓÎÏ·½áÊø");
+	printf("å½“è›‡æ’åˆ°éšœç¢ç‰©æ—¶æ¸¸æˆç»“æŸ");
 	GotoXY(45, 22);
-	printf("°´ÈÎÒâ¼ü·µ»ØÉÏ¼¶Ä¿Â¼");
+	printf("æŒ‰ä»»æ„é”®è¿”å›ä¸Šçº§ç›®å½•");
 	Hide();
 	char ch = _getch();
 	system("cls");
@@ -113,14 +113,14 @@ void InitMap()
 	for (int i = 1; i < MAP_WIDTH - 1; i++)
 	{
 		GotoXY(i, 0);
-		printf("¡ª");
+		printf("â€”");
 		GotoXY(i, MAP_HEIGHT - 1);
-		printf("¡ª");
+		printf("â€”");
 	}
 	PrintFood();
 	PrintObstacle();
 	GotoXY(105, 5);
-	printf("µ±Ç°µÃ·Ö£º0");
+	printf("å½“å‰å¾—åˆ†ï¼š0");
 }
 void PrintObstacle()
 {
@@ -227,7 +227,7 @@ int MoveSnake()
 		PrintFood();
 		GotoXY(105, 5);
 		score = snake.length - 3;
-		printf("µ±Ç°µÃ·Ö£º%d", score);
+		printf("å½“å‰å¾—åˆ†ï¼š%d", score);
 
 	}
 	if (!IsCorrect())
@@ -236,11 +236,11 @@ int MoveSnake()
 		Recordeddata();
 		GotoXY(45, 14);
 		score = snake.length - 3;
-		printf("×îÖÕµÃ·Ö£º%d", score);
+		printf("æœ€ç»ˆå¾—åˆ†ï¼š%d", score);
 		GotoXY(45, 16);
-		printf("ÄãÊäÁË£¡");
+		printf("ä½ è¾“äº†ï¼");
 		GotoXY(45, 18);
-		printf("°´ÈÎÒâ¼ü·µ»ØÖ÷²Ëµ¥");
+		printf("æŒ‰ä»»æ„é”®è¿”å›ä¸»èœå•");
 		char c = _getch();
 		system("cls");
 		return 0;
@@ -265,7 +265,7 @@ int IsCorrect()
 			snake.length = i;
 			GotoXY(105, 5);
 			score = snake.length - 3;
-			printf("µ±Ç°µÃ·Ö£º%d", score);
+			printf("å½“å‰å¾—åˆ†ï¼š%d", score);
 			return 1;
 		}
 
@@ -306,35 +306,35 @@ void SpeedControl()
 	}
 }
 
-void Recordeddata()   //±£´æ³É¼¨
+void Recordeddata()   //ä¿å­˜æˆç»©
 {
 	time_t timep;
 	struct tm* ti;
 	time(&timep);
-	ti = localtime(&timep);              //»ñÈ¡ÏµÍ³Ê±¼ä
+	ti = localtime(&timep);              //è·å–ç³»ç»Ÿæ—¶é—´
 	record* gdata = (record*)malloc(sizeof(record));
-	gdata->year = ti->tm_year;//Äê
-	gdata->mon = ti->tm_mon;  //ÔÂ
-	gdata->day = ti->tm_mday; //ÈÕ
-	gdata->hour = ti->tm_hour;//Ê±
-	gdata->min = ti->tm_min;  //·Ö
-	gdata->sec = ti->tm_sec;  //Ãë
+	gdata->year = ti->tm_year;//å¹´
+	gdata->mon = ti->tm_mon;  //æœˆ
+	gdata->day = ti->tm_mday; //æ—¥
+	gdata->hour = ti->tm_hour;//æ—¶
+	gdata->min = ti->tm_min;  //åˆ†
+	gdata->sec = ti->tm_sec;  //ç§’
 	gdata->fraction = score;
 	FILE* fp = fopen("out.txt", "ab");
 	if (fp == NULL)
 		fp = fopen("out.txt", "wb");
 	fwrite(gdata, sizeof(record), 1, fp);
-	fclose(fp);         //É¾³ıÎÄ¼şÖ¸Õë
+	fclose(fp);         //åˆ é™¤æ–‡ä»¶æŒ‡é’ˆ
 	free(gdata);
 }
 
 
 int Cmpfunc(const void* a, const void* b)
 {
-	return(*(int*)b - *(int*)a);//½µĞòÅÅĞò
+	return(*(int*)b - *(int*)a);//é™åºæ’åº
 }
 
-void Rankinglist()   //ÅÅĞĞ°ñÏÔÊ¾
+void Rankinglist()   //æ’è¡Œæ¦œæ˜¾ç¤º
 {
 	system("cls");
 	int i = 0;
@@ -343,31 +343,32 @@ void Rankinglist()   //ÅÅĞĞ°ñÏÔÊ¾
 	if (fp == NULL)
 	{
 		GotoXY(56, 12);
-		printf("ÔİÎŞ¼ÇÂ¼");
+		printf("æš‚æ— è®°å½•");
 		return;
 	}
 	rewind(fp);
-	while (!feof(fp))                           //feof¼ì²éÎÄ¼şÊÇ·ñ½áÊø£¬Óöµ½½áÊø·û£¬·µ»Ø·ÇÁã
+	while (!feof(fp))                           //feofæ£€æŸ¥æ–‡ä»¶æ˜¯å¦ç»“æŸï¼Œé‡åˆ°ç»“æŸç¬¦ï¼Œè¿”å›éé›¶
 	{
 		fread(&gdata[i], sizeof(struct record), 1, fp);
 		i++;
 	}
-	qsort(gdata, i - 1, sizeof(record), Cmpfunc);//°´µÃ·ÖÅÅĞò
+	qsort(gdata, i - 1, sizeof(record), Cmpfunc);//æŒ‰å¾—åˆ†æ’åº
+	i = i > 8 ? 8 : i;
 	GotoXY(52, 3);
-	printf("ÅÅĞĞ°ñ");
+	printf("æ’è¡Œæ¦œ");
 	GotoXY(42, 5);
-	printf("µÃ·Ö\t\t\tÊ±¼ä\n");
+	printf("å¾—åˆ†\t\t\tæ—¶é—´\n");
 	int j;
-	for (j = 0; j < i - 1; j++)                     //×Ü¹²ÓĞi-1Ìõ¼ÇÂ¼ĞÅÏ¢
+	for (j = 0; j < i - 1; j++)                     //æ€»å…±æœ‰i-1æ¡è®°å½•ä¿¡æ¯
 	{
 		GotoXY(43, 7 + j * 2);
 		printf("%d\t\t", gdata[j].fraction);
 		printf("%d/%02d/%02d ", gdata[j].year + 1900, gdata[j].mon + 1, gdata[j].day);
 		printf("%02d:%02d:%02d\n", gdata[j].hour, gdata[j].min, gdata[j].sec);
 	}
-	fclose(fp);                               //É¾³ıÎÄ¼şÖ¸Õë
+	fclose(fp);                               //åˆ é™¤æ–‡ä»¶æŒ‡é’ˆ
 	GotoXY(43, 9 + j * 2);
-	printf("°´ÈÎÒâ¼ü·µ»ØÉÏ¼¶Ä¿Â¼");
+	printf("æŒ‰ä»»æ„é”®è¿”å›ä¸Šçº§ç›®å½•");
 	Hide();
 	char ch = _getch();
 	system("cls");
