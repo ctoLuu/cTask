@@ -1,4 +1,3 @@
-#pragma once
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -17,19 +16,20 @@ typedef struct student
 	long num;
 	char name[NAME_LEN];
 	float score[COURSE_NUM];
-	float sum;
-	float aver;
+	float sum=0;
+	float aver=0;
 
 }STU;
 
-int MENU(void);
-void SetPosition(int x, int t);
+int Menu(void);
+void SetPosition(int x, int y);
+void TidyupRecord(STU stu[], int n, int m);
 void InputRecord(STU stu[], int* n, int* m);
-void AppendRecord(STU stu[], int* n, int* m);
-void DeleteRecord(STU stu[], int* n, int* m);
-void SearchbyNum(STU stu[], int n, int* m);
-void SearchbyName(STU stu[], int n, int* m);
-void ModifyRecord(STU stu[], int n, int* m);
+void AppendRecord(STU stu[], int* n, int m);
+void DeleteRecord(STU stu[], int* n, int m);
+void SearchbyNum(STU stu[], int n, int m);
+void SearchbyName(STU stu[], int n, int m);
+void ModifyRecord(STU stu[], int n, int m);
 void CalculateScoreOfStudent(STU stu[], int n, int m);
 void CalculateScoreOfCourse(STU stu[], int n, int m);
 void SortbyNum(STU stu[], int n, int m);
@@ -39,5 +39,5 @@ int Ascending(float a, float b);
 int Descending(float a, float b);
 void StatisticAnalysis(STU stu[], int n, int m);
 void PrintRecord(STU stu[], int n, int m);
-void WritetoFile(STU stu[], int n, int m);
-int ReadfromFile(STU stu[], int* n, int* m, int* first);
+void WritetoFile(int n, int m, STU stu[]);
+int ReadfromFile(int* n, int* m, STU stu[], int* first);
