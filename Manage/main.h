@@ -21,7 +21,8 @@ typedef struct student
 
 }STU;
 
-int Menu(void);
+int Menu_Teacher(void);
+int Menu_Student(void);
 void SetPosition(int x, int y);
 void TidyupRecord(STU stu[], int n, int m);
 void InputRecord(STU stu[], int* n, int* m);
@@ -41,3 +42,4 @@ void StatisticAnalysis(STU stu[], int n, int m);
 void PrintRecord(STU stu[], int n, int m);
 void WritetoFile(int n, int m, STU stu[]);
 int ReadfromFile(int* n, int* m, STU stu[], int* first);
+int Exchange_identity();

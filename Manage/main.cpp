@@ -9,13 +9,21 @@ int main()
 	int i, j;
 	char ch;
 	int first = 1;
+	int identity = 2;
 	STU stu[STU_NUM];
 	system("mode con cols=130 Lines=60");
 	system("color 0E");
 	while (1)
 	{
 		system("cls");
-		ch = Menu();
+		if (identity==1)
+		{
+			ch = Menu_Teacher();
+		}
+		else if(identity == 2)
+		{
+			ch = Menu_Student();
+		}
 		TidyupRecord(stu, n, m);
 		switch (ch) {
 		case 1:
@@ -187,6 +195,11 @@ int main()
 				getch();
 				break;
 			}
+			getch();
+			break;
+		case 17:
+			system("cls");
+			identity=Exchange_identity();
 			getch();
 			break;
 		case 0:

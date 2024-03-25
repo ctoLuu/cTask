@@ -2,7 +2,7 @@
 #pragma warning(disable: 4996)
 #include"main.h"
 
-int Menu(void)
+int Menu_Teacher(void)
 {
 	int posy = 5;
 	int option;
@@ -50,6 +50,8 @@ int Menu(void)
 	SetPosition(POS_X4, posy);
 	printf("16.从磁盘读取学生记录");
 	SetPosition(POS_X1, posy += 2);
+	printf("17.切换身份");
+	SetPosition(POS_X4, posy);
 	printf("0.退出");
 	for (i = 0; i < 2; i++)
 	{
@@ -62,6 +64,65 @@ int Menu(void)
 	SetPosition(POS_X1, ++posy);
 	printf("请选择你想要进行的操作[0~16]:[  ]\b\b\b");
 	scanf("%d", &option);
+	return option;
+}
+
+int Menu_Student(void)
+{
+	int posy = 2;
+	int option;
+	int i, j;
+	SetPosition(POS_X3, posy);
+	printf("学生成绩管理系统\n");
+	for (i = 0; i < 2; i++)
+	{
+		SetPosition(POS_X1, ++posy);
+		for (j = 0; j < 55; j++)
+		{
+			printf("-");
+		}
+	}
+	SetPosition(POS_X2, ++posy);
+	printf("1.按学号查找记录");
+	SetPosition(POS_X2, posy += 2);
+	printf("2.按姓名查找记录");
+	SetPosition(POS_X2, posy += 2);
+	printf("3.按学号排序");
+	SetPosition(POS_X2, posy += 2);
+	printf("4.按姓名排序");
+	SetPosition(POS_X2, posy += 2);
+	printf("5.按总成绩升序排列");
+	SetPosition(POS_X2, posy += 2);
+	printf("6.按总成绩降序排名");
+	SetPosition(POS_X2, posy += 2);
+	printf("7.打印学生记录");
+	SetPosition(POS_X2, posy += 2);
+	printf("8.从磁盘读取学生记录");
+	SetPosition(POS_X2, posy += 2);
+	printf("9.切换身份");
+	SetPosition(POS_X2, posy += 2);
+	printf("0.退出");
+	for (i = 0; i < 2; i++)
+	{
+		SetPosition(POS_X1, ++posy);
+		for (j = 0; j < 55; j++)
+		{
+			printf("-");
+		}
+	}
+	SetPosition(POS_X1, ++posy);
+	printf("请选择你想要进行的操作[0~16]:[  ]\b\b\b");
+	scanf("%d", &option);
+	if (option == 1)option = 4;
+	else if (option == 2)option = 5;
+	else if (option == 3)option = 9;
+	else if (option == 4)option = 10;
+	else if (option == 5)option = 11;
+	else if (option == 6)option = 12;
+	else if (option == 7)option = 14;
+	else if (option == 8)option = 16;
+	else if (option == 9)option = 17;
+	else option = -1;
 	return option;
 }
 
@@ -537,4 +598,32 @@ void TidyupRecord(STU stu[], int n, int m)
 		}
 		stu[i].aver = stu[i].sum / (float)m;
 	}
+}
+
+int Exchange_identity()
+{
+	int identity;
+	SetPosition(POS_X2, 15);
+	printf("1.老师");
+	SetPosition(POS_X2, 17);
+	printf("2.学生");
+	SetPosition(POS_X2, 23);
+	printf("请选择你想要选择的身份:[  ]\b\b\b");
+	scanf("%d", &identity);
+	if (identity == 1)
+	{
+		system("cls");
+		printf("成功选择身份：老师");
+	}
+	else if (identity == 2)
+	{
+		system("cls");
+		printf("成功选择身份：学生");
+	}
+	else
+	{
+		system("cls");
+		printf("选择身份失败");
+	}
+	return identity;
 }
