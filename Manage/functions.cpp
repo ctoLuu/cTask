@@ -189,14 +189,12 @@ void AppendRecord(STU* head, int* n, int m)
 		scanf("%d", &num_record);
 	}
 	STU* current = head;
-	STU* pre = NULL;
-	while (current != NULL)
+	while (current->next != NULL)
 		current = current->next;
 	for (i = *n; i < *n + num_record; i++)
 	{
-		current = (STU*)malloc(sizeof(STU));
-		if (pre != NULL)
-			pre->next = current;
+		current->next = (STU*)malloc(sizeof(STU));
+		current = current->next;
 		current->next = NULL;
 		printf("输入第%d个学生信息：\t", i + 1);
 		scanf("%ld%s", &current->num, current->name);
@@ -204,7 +202,6 @@ void AppendRecord(STU* head, int* n, int m)
 		{
 			scanf("%f", &current->score[j]);
 		}
-		pre = current;
 	}
 	*n = *n + num_record;
 	printf("添加完毕！\n");
@@ -260,7 +257,7 @@ void SearchbyNum(STU* head, int n, int m)
 {
 	long id;
 	int i, j;
-	flag = 1;
+	int flag = 1;
 	printf("请输入你要查找的学生的学号：");
 	scanf("%ld", &id);
 	STU* current = head->next;
@@ -626,6 +623,7 @@ int ReadfromFile(int* n, int* m, STU* head, int* first)
 			fscanf(fp, "%f", &(current->score[j]));
 		}
 		fscanf(fp, "%f%f", &(current->sum), &(current->aver));
+		current->next = NULL;
 	}
 	*first = 0;
 	fclose(fp);
