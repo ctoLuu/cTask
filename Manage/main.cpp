@@ -10,7 +10,10 @@ int main()
 	char ch;
 	int first = 1;
 	int identity = 2;
-	STU stu[STU_NUM];
+	//STU stu[STU_NUM];
+	STU* Head;
+	Head = (STU*)malloc(sizeof(STU));
+	Head->next = NULL;
 	system("mode con cols=130 Lines=60");
 	system("color 0E");
 	while (1)
@@ -24,11 +27,11 @@ int main()
 		{
 			ch = Menu_Student();
 		}
-		TidyupRecord(stu, n, m);
+		TidyupRecord(Head, n, m);
 		switch (ch) {
 		case 1:
 			system("cls");
-			InputRecord(stu, &n, &m);
+			InputRecord(Head, &n, &m);
 			break;
 		case 2:
 			system("cls");
@@ -38,7 +41,7 @@ int main()
 				system("pause");
 				break;
 			}
-			AppendRecord(stu, &n, m);
+			AppendRecord(Head, &n, m);
 			system("pause");
 			break;
 		case 3:
@@ -49,7 +52,7 @@ int main()
 				system("pause");
 				break;
 			}
-			DeleteRecord(stu, &n, m);
+			DeleteRecord(Head, &n, m);
 			system("pause");
 			break;
 			break;
@@ -61,7 +64,7 @@ int main()
 				system("pause");
 				break;
 			}
-			SearchbyNum(stu, n, m);
+			SearchbyNum(Head, n, m);
 			system("pause");
 			break;
 		case 5:
@@ -72,7 +75,7 @@ int main()
 				system("pause");
 				break;
 			}
-			SearchbyName(stu, n, m);
+			SearchbyName(Head, n, m);
 			system("pause");
 			break;
 		case 6:
@@ -83,7 +86,7 @@ int main()
 				system("pause");
 				break;
 			}
-			ModifyRecord(stu, n, m);
+			ModifyRecord(Head, n, m);
 			system("pause");
 			break;
 		case 7:
@@ -94,7 +97,7 @@ int main()
 				system("pause");
 				break;
 			}
-			CalculateScoreOfStudent(stu, n, m);
+			CalculateScoreOfStudent(Head, n, m);
 			system("pause");
 			break;
 		case 8:
@@ -106,7 +109,7 @@ int main()
 				getch();
 				break;
 			}
-			CalculateScoreOfCourse(stu, n, m);
+			CalculateScoreOfCourse(Head, n, m);
 			getch();
 			break;
 		case 9:
@@ -118,7 +121,7 @@ int main()
 				getch();
 				break;
 			}
-			SortbyNum(stu, n, m);
+			SortbyNum(Head, n, m);
 			getch();
 			break;
 		case 10:
@@ -130,7 +133,7 @@ int main()
 				getch();
 				break;
 			}
-			SortbyName(stu, n, m);
+			SortbyName(Head, n, m);
 			getch();
 			break;
 		case 11:
@@ -142,7 +145,7 @@ int main()
 				getch();
 				break;
 			}
-			SortbyScore(stu, n, m, Descending);
+			SortbyScore(Head, n, m, Descending);
 			getch();
 			break;
 		case 12:
@@ -154,7 +157,7 @@ int main()
 				getch();
 				break;
 			}
-			SortbyScore(stu, n, m, Ascending);
+			SortbyScore(Head, n, m, Ascending);
 			getch();
 			break;
 		case 13:
@@ -166,7 +169,7 @@ int main()
 				getch();
 				break;
 			}
-			StatisticAnalysis(stu, n, m);
+			StatisticAnalysis(Head, n, m);
 			getch();
 			break;
 		case 14:
@@ -178,17 +181,17 @@ int main()
 				getch();
 				break;
 			}
-			PrintRecord(stu, n, m);
+			PrintRecord(Head, n, m);
 			getch();
 			break;
 		case 15:
 			system("cls");
-			WritetoFile(n, m, stu);
+			WritetoFile(n, m, Head);
 			getch();
 			break;
 		case 16:
 			system("cls");
-			if (ReadfromFile(&n, &m, stu, &first) || first)
+			if (ReadfromFile(&n, &m, Head, &first) || first)
 			{
 				SetPosition(POS_X3, POS_Y);
 				printf("尚未输入学生信息或文件打开失败，请先检查！\n");
