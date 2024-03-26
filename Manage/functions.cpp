@@ -404,52 +404,30 @@ void CalculateScoreOfCourse(STU* head, int n, int m)
 void SortbyNum( STU* head, int n, int m) {
 	int i, j;
 	int k;
-	int flag = 0;
-	STU* pre = head;
-	STU* current = head->next;
-	STU* Next = current->next;
-	STU* temp = NULL;
-	STU* init = head;
-	for (i = 0; i < n - 1; i++)
-	{
-		if (i == 1) {
-			pre = head;
-			current = head->next;
-			Next = current->next;
-			temp = NULL;
-		}
-		else {
-			init = init->next;
-			for (int k = i; k > 0; k--)
-			{
-				STU* pre = init;
-				STU* current = init->next;
-				STU* Next = current->next;
-				STU* temp = NULL;
-			}
-		}
-		for (j = 0; j < n - 1 - i; j++) {
-			if (!flag && current->num > Next->num)
-			{
-				current->next = Next->next;
-				pre->next = Next;
-				Next->next = current;
-				flag = 1;
-			}
-			else if (flag && current->num > Next->num)
-			{
-				Next->next = current->next;
-				pre->next = current;
-				current->next = Next;
-				flag = 0;
+	STU* temp, * current;
+	for (i = 0; i < n; i++) {
+		current = head->next;
+		temp = head->next;
+		for (j = 0; j < n - i - 1; j++) {
+			if (current->num > current->next->num) {
+				if (current == head->next) {
+					head->next = current->next;
+					temp = current->next;
+					current->next = temp->next;
+					temp->next = current;
+				}
+				else {
+					temp->next = current->next;
+					current->next = current->next->next;
+					temp->next->next = current;
+					temp = temp->next;
+				}
 			}
 			else {
-				pre = pre->next;
+				temp = current;
 				current = current->next;
-				Next = Next->next;
 			}
 		}
-		
 	}
 	printf("按学号从小到大对学生记录排序完毕");
 }
