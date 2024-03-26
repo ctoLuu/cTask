@@ -337,7 +337,7 @@ void ModifyRecord(STU* head, int n, int m)
 			if (ch == 'Y' || ch == 'y')
 			{
 				printf("请输入要修改的学生信息：");
-				scanf("%ld%s", current->num, current->name);
+				scanf("%ld%s", &current->num, current->name);
 				current->sum = 0;
 				for (j = 0; j < m; j++)
 				{
@@ -468,12 +468,12 @@ void SortbyScore(STU* head, int n, int m, int(*compare)(float a, float b)) {
 	STU* temp, * current;
 
 	for (i = 0; i < n; i++) {
-		current = head;
-		temp = head;
+		current = head->next;
+		temp = head->next;
 		for (j = 0; j < n - i - 1; j++) {
 			if ((*compare)(current->sum, current->next->sum)) {
-				if (current == head) {
-					head = current->next;
+				if (current == head->next) {
+					head->next = current->next;
 					temp = current->next;
 					current->next = temp->next;
 					temp->next = current;
@@ -499,12 +499,12 @@ void SortbyName(STU* head, int n, int m) {
 	STU* temp, * current;
 
 	for (i = 0; i < n; i++) {
-		current = head;
-		temp = head;
+		current = head->next;
+		temp = head->next;
 		for (j = 0; j < n - i - 1; j++) {
 			if (strcmp(current->name, current->next->name) > 0) {
-				if (current == head) {
-					head = current->next;
+				if (current == head->next) {
+					head->next = current->next;
 					temp = current->next;
 					current->next = temp->next;
 					temp->next = current;
