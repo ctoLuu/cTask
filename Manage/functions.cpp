@@ -260,6 +260,7 @@ void SearchbyNum(STU* head, int n, int m)
 {
 	long id;
 	int i, j;
+	flag = 1;
 	printf("请输入你要查找的学生的学号：");
 	scanf("%ld", &id);
 	STU* current = head->next;
@@ -274,13 +275,16 @@ void SearchbyNum(STU* head, int n, int m)
 				printf("%10.2f", current->score[j]);
 			}
 			printf("%10.2f%10.2f", current->sum, current->aver);
+			flag = 0;
+			break;
 		}
 		else
 		{
 			current = current->next;
 		}
 	}
-	printf("未找到这个学号对应的学生记录\n");
+	if(flag)
+		printf("未找到这个学号对应的学生记录\n");
 }
 void SearchbyName(STU* head, int n, int m)
 {
@@ -303,6 +307,7 @@ void SearchbyName(STU* head, int n, int m)
 			}
 			printf("%10.2f%10.2f\n", current->sum, current->aver);
 			flag = 0;
+			break;
 		}
 		else
 			current = current->next;
@@ -403,7 +408,6 @@ void CalculateScoreOfCourse(STU* head, int n, int m)
 
 void SortbyNum( STU* head, int n, int m) {
 	int i, j;
-	int k;
 	STU* temp, * current;
 	for (i = 0; i < n; i++) {
 		current = head->next;
@@ -577,7 +581,7 @@ void WritetoFile(int n, int m, STU* head)
 	int i, j;
 	FILE* fp; 
 	STU* current = head->next;
-	if ((fp = fopen("D:\\storage\\student_score\\student.txt", "w")) == NULL)
+	if ((fp = fopen("./student.txt", "w")) == NULL)
 	{
 		printf("磁盘文件student.txt无法打开");
 		return;
@@ -603,9 +607,9 @@ int ReadfromFile(int* n, int* m, STU* head, int* first)
 	FILE* fp;
 	int i, j;
 	int posy = 8;
-	STU* current = head->next;
+	STU* current = head;
 	SetPosition(POS_X1, posy);
-	if ((fp = fopen("D:\\storage\\student_score\\student.txt", "r")) == NULL)
+	if ((fp = fopen("./student.txt", "r")) == NULL)
 	{
 		printf("磁盘文件student.txt无法打开");
 		return 1;
@@ -613,21 +617,21 @@ int ReadfromFile(int* n, int* m, STU* head, int* first)
 	fscanf(fp, "%10d%10d", n, m);
 	for (i = 0; i < *n; i++)
 	{
-		fscanf(fp, "%10ld", current->num);
+		current->next = (STU*)malloc(sizeof(STU));
+		current = current->next;
+		fscanf(fp, "%10ld", &(current->num));
 		fscanf(fp, "%10s", current->name);
 		for (j = 0; j < *m; j++)
 		{
-			fscanf(fp, "%10f", current->score[j]);
+			fscanf(fp, "%f", &(current->score[j]));
 		}
-		fscanf(fp, "%10f%10f", current->sum, current->aver);
-		current = current->next;
+		fscanf(fp, "%f%f", &(current->sum), &(current->aver));
 	}
 	*first = 0;
 	fclose(fp);
 	printf("数据从磁盘读取完毕！");
 	return 0;
 }
-
 
 void PrintRecord(STU* head, int n, int m)
 {
