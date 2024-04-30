@@ -26,28 +26,28 @@ void radixSort(int*, int);// 基数排序
 
 int main()
 {
-    srand(1);
+    srand(500);
     int *array;
-    int size = 100000;
+    int size = 1000;
     array = newArray(array, size);
     printf("bubbleSort:\n");
-    recordLongTime(bubbleSort, array, size);
+    recordShortTime(bubbleSort, array, size);
     printf("selectSort:\n");
-    recordLongTime(selectSort, array, size);
+    recordShortTime(selectSort, array, size);
     printf("insertSort:\n");
-    recordLongTime(insertSort, array, size);
+    recordShortTime(insertSort, array, size);
     printf("shellSort:\n");
-    recordLongTime(shellSort, array, size);
+    recordShortTime(shellSort, array, size);
     printf("quickSort:\n");
-    recordLongTime(quickSort, array, size);
+    recordShortTime(quickSort, array, size);
     printf("mergeSort:\n");
-    recordLongTime(mergeSort, array, size);
+    recordShortTime(mergeSort, array, size);
     printf("heapSort:\n");
-    recordLongTime(heapSort, array, size);
+    recordShortTime(heapSort, array, size);
     printf("countSort:\n");
-    recordLongTime(countSort, array, size);
+    recordShortTime(countSort, array, size);
     printf("radixSort:\n");
-    recordLongTime(radixSort, array, size);
+    recordShortTime(radixSort, array, size);
 }
 
 // 生成大小为 size 的随机数组
@@ -394,4 +394,3 @@ void radixSort(int* array, int size) {
     checkArray(sortArray, size);
     free(sortArray);
 }
-
