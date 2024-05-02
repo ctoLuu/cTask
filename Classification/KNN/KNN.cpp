@@ -16,7 +16,7 @@ int readTxt(Iris* irises)
 	char species[20];
 	for (int i = 0; i < SIZE; i++) {
 		if (fgets(line, 100, file) != NULL) {
-			sscanf(line, "%lf,%lf,%lf,%lf,%s", &irises[i].feature[0], &irises[i].feature[1], &irises[i].feature[2], &irises[i].feature[3], species);
+			sscanf(line, "%f,%f,%f,%f,%s", &irises[i].feature[0], &irises[i].feature[1], &irises[i].feature[2], &irises[i].feature[3], species);
 
 			if (strcmp(species, "Iris-setosa") == 0)
 				irises[i].species = 0;
@@ -39,13 +39,13 @@ int readTxt(Iris* irises)
 
 void preProcess(Iris* irises)
 {
-	double MAX[4], MIN[4];
+	float MAX[4], MIN[4];
 	getMinMax(irises, MAX, MIN);
 	MinMaxScalar(irises, MAX, MIN);
 	shuffleData(irises);
 }
 
-void getMinMax(Iris* irises, double* MAX, double* MIN) {
+void getMinMax(Iris* irises, float* MAX, float* MIN) {
 	for (int i = 0; i < 4; i++) {
 		MAX[i] = irises[0].feature[i];
 		MIN[i] = irises[0].feature[i];
@@ -61,8 +61,8 @@ void getMinMax(Iris* irises, double* MAX, double* MIN) {
 	}
 }
 
-void MinMaxScalar(Iris* irises, double* MAX, double *MIN) {
-	double Scalar[4];
+void MinMaxScalar(Iris* irises, float* MAX, float *MIN) {
+	float Scalar[4];
 	for (int i = 0; i < 4; i++) {
 		Scalar[i] = MAX[i] - MIN[i];
 	}
@@ -74,7 +74,6 @@ void MinMaxScalar(Iris* irises, double* MAX, double *MIN) {
 }
 
 void shuffleData(Iris* irises) {
-	srand((unsigned int)time(0));
 	for (int i = SIZE - 1; i > 0; i--) {
 		int j = rand() % (i + 1);
 		swap(&irises[i], &irises[j]);
@@ -102,51 +101,55 @@ void splitData(Iris* irises, Iris* train, Iris* test) {
 }
 
 void predict(Iris* train, Iris* test) {
-	Dis* distance = (Dis*)malloc(trainSize * testSize * sizeof(Dis));
+	Dis distance[120];
+	Dis rank[300];
 	for (int i = 0; i < testSize; i++) {
 		for (int j = 0; j < trainSize; j++) {
-			double sum = 0;
+			float sum = 0;
 			for (int k = 0; k < 4; k++) {
 				sum += pow(test[i].feature[k] - train[j].feature[k], 2);
 			}
-			distance[i * testSize + j].distance = sqrt(sum);
-			distance[i * testSize + j].species = train[j].species;
+			distance[j].distance = sqrt(sum);
+			distance[j].species = train[j].species;
 		}
-		quickSort(distance, 0, trainSize, i);
+		quickSort(distance, 0, trainSize - 1);
+		for (int m = 0; m < K; m++) {
+			rank[i * K + m] = distance[m];
+		}
 	}
 
 	int species[3] = { 0 };
 	int trueNum = 0;
-	for (int K = 1; K < 10; K+=2) {
-		for (int i = 0; i < testSize; i++) {
-			for (int j = 0; j < K; j++) {
-				species[distance[i * testSize + j].species]++;
-			}
-			if (getSpecie(species) == test[i].species)
-				trueNum++;
+	for (int i = 0; i < testSize; i++) {
+		for (int j = 0; j < K; j++) {
+			species[rank[i * 10 + j].species]++;
 		}
-		printf("K = %d, precision = %lf", K, (double)trueNum / testSize);
+		if (getSpecie(species) == test[i].species)
+			trueNum++;
+		for (int k = 0; k < 3; k++) {
+			species[k] = 0;
+		}
 	}
-	free(distance);
+	printf("K = %d, precision = %f", K, (float)trueNum / testSize);
 }
 
-void quickSort(Dis* arr, int low, int high, int flag) {
+void quickSort(Dis* arr, int low, int high) {
 	int i = low;
 	int j = high;
-	int temp = arr[flag * testSize].distance;
+	int temp = arr[low].distance;
 	if (i >= j)
 		return;
 	while (i != j) {
-		while (i < j && arr[flag * testSize + j].distance >= temp)
+		while (i < j && arr[j].distance >= temp)
 			j--;
-		while (i < j && arr[flag * testSize + i].distance <= temp)
+		while (i < j && arr[i].distance <= temp)
 			i++;
 		if (i < j)
-			swap(&arr[flag * testSize + i], &arr[flag * testSize + j]);
+			swap(&arr[i], &arr[j]);
 	}
-	swap(&arr[flag * testSize + low], &arr[flag * testSize + i]);
-	quickSort(arr, i + 1, high, flag);
-	quickSort(arr, low, i - 1, flag);
+	swap(&arr[low], &arr[i]);
+	quickSort(arr, i + 1, high);
+	quickSort(arr, low, i - 1);
 }
 
 int getSpecie(int* species) {

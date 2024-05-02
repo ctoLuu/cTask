@@ -6,26 +6,27 @@
 #include<time.h>
 #define SIZE 150
 #define TRAIN_RATE 0.8
+#define K 10
 
 typedef struct {
-	double feature[4];
+	float feature[4];
 	int species;
 }Iris;
 typedef struct {
-	double distance;
+	float distance;
 	int species;
 }Dis;
 
 int readTxt(Iris*);
 void preProcess(Iris*);
-void getMinMax(Iris*, double*, double*);
-void MinMaxScalar(Iris*, double*, double*);
+void getMinMax(Iris*, float*, float*);
+void MinMaxScalar(Iris*, float*, float*);
 void splitData(Iris*, Iris*, Iris*);
 void shuffleData(Iris*);
 void swap(Iris*, Iris*);
 void swap(Dis*, Dis*);
 void predict(Iris*, Iris*);
-void quickSort(Dis*, int, int, int);
+void quickSort(Dis*, int, int);
 int getSpecie(int*);
 
 extern size_t trainSize;
