@@ -6,7 +6,7 @@
 #include<time.h>
 #define SIZE 150
 #define TRAIN_RATE 0.8
-#define K 10
+#define K 65
 
 typedef struct {
 	float feature[4];

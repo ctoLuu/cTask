@@ -102,7 +102,7 @@ void splitData(Iris* irises, Iris* train, Iris* test) {
 
 void predict(Iris* train, Iris* test) {
 	Dis distance[120];
-	Dis rank[300];
+	Dis rank[30 * K];
 	for (int i = 0; i < testSize; i++) {
 		for (int j = 0; j < trainSize; j++) {
 			float sum = 0;
@@ -122,7 +122,7 @@ void predict(Iris* train, Iris* test) {
 	int trueNum = 0;
 	for (int i = 0; i < testSize; i++) {
 		for (int j = 0; j < K; j++) {
-			species[rank[i * 10 + j].species]++;
+			species[rank[i * K + j].species]++;
 		}
 		if (getSpecie(species) == test[i].species)
 			trueNum++;
