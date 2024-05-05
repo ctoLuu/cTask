@@ -15,6 +15,7 @@ int main()
 		return 0;
 	preProcess(irises);
 	splitData(irises, train, test);
+	// ÊÍ·ÅÄÚ´æ
 	free(irises);
-	predict(train, test);
+	predict(train, test, 100);
 }
