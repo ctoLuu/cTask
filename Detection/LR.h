@@ -6,8 +6,8 @@
 #include<time.h>
 #define SIZE 17001
 #define TRAIN_RATE 0.8
-#define LEARNING_RATE 0.2
-#define EPOCH 10000
+#define LEARNING_RATE 0.1
+#define EPOCH 100000
 
 extern size_t trainSize;
 extern size_t testSize;
@@ -26,7 +26,7 @@ void splitData(Module*, Module*, Module*);
 void shuffleData(Module*);
 void swap(Module*, Module*);
 void splitData(Module*, Module*, Module*);
-void train(Module*, double*, double);
+void train(Module*, double*, double&, double);
 void predict(Module*, double*, double);
 double sigmoid(double);
 double calculateLogLoss(double, double);
