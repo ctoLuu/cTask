@@ -98,39 +98,44 @@ void splitData(Module* Modules, Module* train, Module* test) {
 		test[i - trainSize] = Modules[i];
 }
 
-void train(Module* trainData, double* Weight, double Bias) {
+void train(Module* trainData, double* Weight, double& Bias, double lambda) {
 	for (int i = 0; i < EPOCH; i++) {
-		double z = 0, a = 0;
-		double dz = 0, db = 0, dw[38] = { 0 };
-		double loss = 0;
+		double totalLoss = 0; // 用于累计总损失
+		double regLoss = 0; // 用于累计正则化损失
 
 		for (size_t j = 0; j < trainSize; j++) {
-			// forward propagation
+			double z = 0; // 线性组合结果
 			for (int k = 0; k < 38; k++) {
 				z += Weight[k] * trainData[j].feature[k];
 			}
-			a = sigmoid(z);
-			loss += calculateLogLoss(trainData[j].defective, a);
-			// backward propagation
-			dz = a - trainData[j].defective;
-			db += dz;
+			double a = sigmoid(z); // 应用sigmoid函数
+			double loss = calculateLogLoss(trainData[j].defective, a); // 计算单个样本的损失
+
+			totalLoss += loss; // 累计损失
+
+			// 反向传播，计算梯度
+			double dz = a - trainData[j].defective;
 			for (int k = 0; k < 38; k++) {
-				dw[k] += trainData[j].feature[k] * dz;
+				Weight[k] -= LEARNING_RATE * (trainData[j].feature[k] * dz); // 更新权重
 			}
-			z = 0;
 		}
 
-		loss /= trainSize;
-		db /= trainSize;
+		// 计算L2正则化项
 		for (int k = 0; k < 38; k++) {
-			dw[k] /= trainSize;
-			Weight[k] -= LEARNING_RATE * dw[k];
+			regLoss += Weight[k] * Weight[k];
 		}
-		Bias -= LEARNING_RATE * db;
-		if (i % 1000 == 0)
-			printf("epoch : %d , Loss = %lf\n", i, loss);
+		regLoss *= lambda / (2.0 * trainSize); // 正则化损失
+
+		totalLoss += regLoss; // 将正则化损失加到总损失中
+		totalLoss /= trainSize; // 计算平均损失
+
+		// 输出损失信息，可以用于监控训练过程
+		if (i % 1000 == 0) {
+			printf("epoch : %d , Loss = %lf\n", i, totalLoss);
+		}
 	}
 }
+
 
 double sigmoid(double Z) {
 	return 1.0 / (1.0 + exp(-Z));
