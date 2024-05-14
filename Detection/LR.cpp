@@ -107,7 +107,7 @@ void train(Module* trainData, double* Weight, double Bias) {
 		for (size_t j = 0; j < trainSize; j++) {
 			// forward propagation
 			for (int k = 0; k < 38; k++) {
-				z = Weight[k] * trainData[j].feature[k];
+				z += Weight[k] * trainData[j].feature[k];
 			}
 			a = sigmoid(z);
 			loss += calculateLogLoss(trainData[j].defective, a);
@@ -117,6 +117,7 @@ void train(Module* trainData, double* Weight, double Bias) {
 			for (int k = 0; k < 38; k++) {
 				dw[k] += trainData[j].feature[k] * dz;
 			}
+			z = 0;
 		}
 
 		loss /= trainSize;
@@ -144,7 +145,7 @@ void predict(Module* testData, double* Weight, double Bias) {
 		double z = 0, a = 0;
 		int yhat;
 		for (int j = 0; j < 38; j++) {
-			z = Weight[j] * testData[i].feature[j];
+			z += Weight[j] * testData[i].feature[j];
 		}
 		a = sigmoid(z);
 		yhat = inference(a);

@@ -6,7 +6,7 @@
 #include<time.h>
 #define SIZE 17001
 #define TRAIN_RATE 0.8
-#define LEARNING_RATE 0.02
+#define LEARNING_RATE 0.2
 #define EPOCH 10000
 
 extern size_t trainSize;
