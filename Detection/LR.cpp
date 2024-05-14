@@ -141,9 +141,11 @@ double calculateLogLoss(double y, double a) {
 }
 
 void predict(Module* testData, double* Weight, double Bias) {
-	int trueNum[101] = { 0 };
+	int trueNum[100] = { 0 };
 	double rate = 0.01;
-	for (int k = 1; k < 100; k++) {//test best rate;
+	int problemNum = 0;
+
+	for (int k = 1; k < 100; k++) {
 		for (int i = 0; i < testSize; i++) {
 			double z = 0, a = 0;
 			int yhat;
@@ -151,27 +153,31 @@ void predict(Module* testData, double* Weight, double Bias) {
 				z += Weight[j] * testData[i].feature[j];
 			}
 			a = sigmoid(z);
-			if (k == 1)
-				yhat = inference(a, rate * k, 1);
-			else
-				yhat = inference(a, rate * k, 0);
+			yhat = inference(a, rate * k);
+			if (yhat == 1)
+				problemNum++;
 			if (yhat == testData[i].defective)
 				trueNum[k]++;
 		}
+
+		printf("rate = %.2lf , defective == 1 number : %d\n", rate * k, problemNum);
+		problemNum = 0;
 	}
-	int maxratei = 0;
+
+	double maxRate = 0;
+	double maxAccuracy = 0;
 	for (int k = 1; k < 100; k++) {
-		printf("rete = %.2lf , Accuracy = %lf\n", rate * k, trueNum[k] * 1.0 / testSize);
-		if (trueNum[k] * 1.0 / testSize > trueNum[maxratei] * 1.0 / testSize) {
-			maxratei = k;
+		double accuracy = trueNum[k] * 1.0 / testSize;
+		printf("rete = %.2lf , Accuracy = %lf\n", rate * k, accuracy);
+		if (accuracy > maxAccuracy) {
+			maxRate = rate * k;
+			maxAccuracy = accuracy;
 		}
 	}
-	printf("\nMax rate : %.2lf , Max Accuracy:%lf", rate * maxratei, trueNum[maxratei] * 1.0 / testSize);
-
+	printf("\nMax rate : %.2lf , Max Accuracy:%lf", maxRate, maxAccuracy);
 }
 
-int inference(double a, double rate, int flag) {
-	if (flag)	printf("%.4lf  ", a);
+int inference(double a, double rate) {
 	if (a >= rate)
 		return 1;
 	else
