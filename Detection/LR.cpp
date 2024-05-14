@@ -97,3 +97,67 @@ void splitData(Module* Modules, Module* train, Module* test) {
 	for (size_t i = trainSize; i < SIZE; i++)
 		test[i - trainSize] = Modules[i];
 }
+
+void train(Module* trainData, double* Weight, double Bias) {
+	for (int i = 0; i < EPOCH; i++) {
+		double z = 0, a = 0;
+		double dz = 0, db = 0, dw[38] = { 0 };
+		double loss = 0;
+		
+		for (size_t j = 0; j < trainSize; j++) {
+			// forward propagation
+			for (int k = 0; k < 38; k++) {
+				z = Weight[k] * trainData[j].feature[k];
+			}
+			a = sigmoid(z);
+			loss += calculateLogLoss(trainData[j].defective, a);
+			// backward propagation
+			dz = a - trainData[j].defective;
+			db += dz;
+			for (int k = 0; k < 38; k++) {
+				dw[k] += trainData[j].feature[k] * dz;
+			}
+		}
+
+		loss /= trainSize;
+		db /= trainSize;
+		for (int k = 0; k < 38; k++) {
+			dw[k] /= trainSize;
+			Weight[k] -= LEARNING_RATE * dw[k];
+		}
+		Bias -= LEARNING_RATE * db;
+		printf("epoch : %d , Loss = %lf\n", i, loss);
+	}
+}
+
+double sigmoid(double Z) {
+	return 1.0 / (1.0 + exp(-Z));
+}
+
+double calculateLogLoss(double y, double a) {
+	return -y * log(a) - (1 - y) * log(1 - a);
+}
+
+void predict(Module* testData, double* Weight, double Bias) {
+	int trueNum = 0;
+	for (int i = 0; i < testSize; i++) {
+		double z = 0, a = 0;
+		int yhat;
+		for (int j = 0; j < 38; j++) {
+			z = Weight[j] * testData[i].feature[j];
+		}
+		a = sigmoid(z);
+		yhat = inference(a);
+		if (yhat == testData[i].defective)
+			trueNum++;
+	}
+	printf("Accuracy = %lf", trueNum * 1.0 / testSize);
+}
+
+int inference(double a) {
+	if (a >= 0.5)
+		return 1;
+	else
+		return 0;
+}
+
