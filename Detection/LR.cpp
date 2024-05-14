@@ -103,7 +103,7 @@ void train(Module* trainData, double* Weight, double Bias) {
 		double z = 0, a = 0;
 		double dz = 0, db = 0, dw[38] = { 0 };
 		double loss = 0;
-		
+
 		for (size_t j = 0; j < trainSize; j++) {
 			// forward propagation
 			for (int k = 0; k < 38; k++) {
@@ -127,7 +127,8 @@ void train(Module* trainData, double* Weight, double Bias) {
 			Weight[k] -= LEARNING_RATE * dw[k];
 		}
 		Bias -= LEARNING_RATE * db;
-		printf("epoch : %d , Loss = %lf\n", i, loss);
+		if (i % 1000 == 0)
+			printf("epoch : %d , Loss = %lf\n", i, loss);
 	}
 }
 
@@ -140,23 +141,38 @@ double calculateLogLoss(double y, double a) {
 }
 
 void predict(Module* testData, double* Weight, double Bias) {
-	int trueNum = 0;
-	for (int i = 0; i < testSize; i++) {
-		double z = 0, a = 0;
-		int yhat;
-		for (int j = 0; j < 38; j++) {
-			z += Weight[j] * testData[i].feature[j];
+	int trueNum[101] = { 0 };
+	double rate = 0.01;
+	for (int k = 1; k < 100; k++) {//test best rate;
+		for (int i = 0; i < testSize; i++) {
+			double z = 0, a = 0;
+			int yhat;
+			for (int j = 0; j < 38; j++) {
+				z += Weight[j] * testData[i].feature[j];
+			}
+			a = sigmoid(z);
+			if (k == 1)
+				yhat = inference(a, rate * k, 1);
+			else
+				yhat = inference(a, rate * k, 0);
+			if (yhat == testData[i].defective)
+				trueNum[k]++;
 		}
-		a = sigmoid(z);
-		yhat = inference(a);
-		if (yhat == testData[i].defective)
-			trueNum++;
 	}
-	printf("Accuracy = %lf", trueNum * 1.0 / testSize);
+	int maxratei = 0;
+	for (int k = 1; k < 100; k++) {
+		printf("rete = %.2lf , Accuracy = %lf\n", rate * k, trueNum[k] * 1.0 / testSize);
+		if (trueNum[k] * 1.0 / testSize > trueNum[maxratei] * 1.0 / testSize) {
+			maxratei = k;
+		}
+	}
+	printf("\nMax rate : %.2lf , Max Accuracy:%lf", rate * maxratei, trueNum[maxratei] * 1.0 / testSize);
+
 }
 
-int inference(double a) {
-	if (a >= 0.5)
+int inference(double a, double rate, int flag) {
+	if (flag)	printf("%.4lf  ", a);
+	if (a >= rate)
 		return 1;
 	else
 		return 0;

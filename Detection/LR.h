@@ -30,4 +30,4 @@ void train(Module*, double*, double);
 void predict(Module*, double*, double);
 double sigmoid(double);
 double calculateLogLoss(double, double);
-int inference(double);
+int inference(double,double,int);
