@@ -28,8 +28,8 @@ int main() {
 	splitData(Modules, trainData, testData);
 	free(Modules);
 	
-	double Weight[38] = { 0 }, Bias = 0, lambda = 0.01;
-	train(trainData, Weight, Bias, lambda);
+	double Weight[38] = { 0 }, Bias = 0;
+	train(trainData, Weight, Bias);
 	predict(testData, Weight, Bias);
 	free(trainData);
 	free(testData);

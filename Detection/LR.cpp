@@ -98,7 +98,7 @@ void splitData(Module* Modules, Module* train, Module* test) {
 		test[i - trainSize] = Modules[i];
 }
 
-void train(Module* trainData, double* Weight, double& Bias, double lambda) {
+void train(Module* trainData, double* Weight, double& Bias) {
 	for (int i = 0; i < EPOCH; i++) {
 		double totalLoss = 0; // 用于累计总损失
 		double regLoss = 0; // 用于累计正则化损失
@@ -124,7 +124,7 @@ void train(Module* trainData, double* Weight, double& Bias, double lambda) {
 		for (int k = 0; k < 38; k++) {
 			regLoss += Weight[k] * Weight[k];
 		}
-		regLoss *= lambda / (2.0 * trainSize); // 正则化损失
+		regLoss *= LAMBDA / (2.0 * trainSize); // 正则化损失
 
 		totalLoss += regLoss; // 将正则化损失加到总损失中
 		totalLoss /= trainSize; // 计算平均损失
