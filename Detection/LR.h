@@ -6,7 +6,7 @@
 #include<time.h>
 #define SIZE 17001
 #define TRAIN_RATE 0.8
-#define LEARNING_RATE 0.1
+#define LEARNING_RATE 0.01
 #define LAMBDA 0.01
 #define EPOCH 10000
 
@@ -32,3 +32,4 @@ void predict(Module*, double*, double);
 double sigmoid(double);
 double calculateLogLoss(double, double);
 int inference(double, double);
+double calculateRegLoss(double*);
