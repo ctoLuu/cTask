@@ -100,36 +100,37 @@ void splitData(Module* Modules, Module* train, Module* test) {
 
 void train(Module* trainData, double* Weight, double& Bias) {
 	for (int i = 0; i < EPOCH; i++) {
-		double totalLoss = 0; // 用于累计总损失
-		double regLoss = 0; // 用于累计正则化损失
-
+		double totalLoss = 0;
+		double regLoss = 0;
+		double z = 0, a = 0;
+		double dz = 0, db = 0, dw[38] = { 0 };
+		
 		for (size_t j = 0; j < trainSize; j++) {
-			double z = 0; // 线性组合结果
+			regLoss = calculateRegLoss(Weight);
+			z = 0;
+			// forward propagation
 			for (int k = 0; k < 38; k++) {
 				z += Weight[k] * trainData[j].feature[k];
 			}
-			double a = sigmoid(z); // 应用sigmoid函数
-			double loss = calculateLogLoss(trainData[j].defective, a); // 计算单个样本的损失
+			z += Bias;
+			a = sigmoid(z);
+			totalLoss += calculateLogLoss(trainData[j].defective, a) + regLoss;
 
-			totalLoss += loss; // 累计损失
-
-			// 反向传播，计算梯度
-			double dz = a - trainData[j].defective;
+			// backward propagation
+			dz = a - trainData[j].defective;
+			db += dz;
 			for (int k = 0; k < 38; k++) {
-				Weight[k] -= LEARNING_RATE * (trainData[j].feature[k] * dz); // 更新权重
+				dw[k] += trainData[j].feature[k] * dz + LAMBDA * Weight[k];
 			}
 		}
 
-		// 计算L2正则化项
+		totalLoss /= trainSize; 
+		db /= trainSize;
 		for (int k = 0; k < 38; k++) {
-			regLoss += Weight[k] * Weight[k];
+			dw[k] /= trainSize;
+			Weight[k] -= LEARNING_RATE * dw[k];
 		}
-		regLoss *= LAMBDA / (2.0 * trainSize); // 正则化损失
-
-		totalLoss += regLoss; // 将正则化损失加到总损失中
-		totalLoss /= trainSize; // 计算平均损失
-
-		// 输出损失信息，可以用于监控训练过程
+		Bias -= LEARNING_RATE * db;
 		if (i % 1000 == 0) {
 			printf("epoch : %d , Loss = %lf\n", i, totalLoss);
 		}
@@ -145,12 +146,23 @@ double calculateLogLoss(double y, double a) {
 	return -y * log(a) - (1 - y) * log(1 - a);
 }
 
+double calculateRegLoss(double* Weight) {
+	double regLoss = 0;
+	for (int i = 0; i < 38; i++) {
+		regLoss += Weight[i] * Weight[i];
+	}
+	return LAMBDA * regLoss / 2.0;
+}
+
 void predict(Module* testData, double* Weight, double Bias) {
 	int trueNum[100] = { 0 };
 	double rate = 0.01;
-	int problemNum = 0;
+	int TP = 0, FP = 0, TN = 0, FN = 0;
+	double maxRate = 0;
+	double maxF1 = 0;
 
 	for (int k = 1; k < 100; k++) {
+		double F1 = 0, precision = 0, recall = 0;
 		for (int i = 0; i < testSize; i++) {
 			double z = 0, a = 0;
 			int yhat;
@@ -159,27 +171,39 @@ void predict(Module* testData, double* Weight, double Bias) {
 			}
 			a = sigmoid(z);
 			yhat = inference(a, rate * k);
-			if (yhat == 1)
-				problemNum++;
 			if (yhat == testData[i].defective)
 				trueNum[k]++;
+			if (yhat == 1) {
+				if (testData[i].defective == 1)
+					TP++;
+				else
+					FP++;
+			}
+			else {
+				if (testData[i].defective == 0)
+					TN++;
+				else
+					FN++;
+			}
 		}
-
-		printf("rate = %.2lf , defective == 1 number : %d\n", rate * k, problemNum);
-		problemNum = 0;
-	}
-
-	double maxRate = 0;
-	double maxAccuracy = 0;
-	for (int k = 1; k < 100; k++) {
-		double accuracy = trueNum[k] * 1.0 / testSize;
-		printf("rete = %.2lf , Accuracy = %lf\n", rate * k, accuracy);
-		if (accuracy > maxAccuracy) {
+		if (FP + TP != 0)
+			precision = 1.0 * TP / (TP + FP);
+		recall = 1.0 * TP / (TP + FN);
+		if (precision + recall != 0)
+			F1 = 2 * precision * recall / (precision + recall);
+		else
+			F1 = 0;
+		printf("rate = %.2f , TP = %d , FP = %d , TN = %d , FN = %d\nPrecision = %lf , Recall = %lf\nF1 = %lf\n\n", rate * k, TP, FP, TN, FN, precision, recall, F1);
+		if (F1 > maxF1) {
 			maxRate = rate * k;
-			maxAccuracy = accuracy;
+			maxF1 = F1;
 		}
+		TP = 0;
+		FP = 0;
+		TN = 0;
+		FN = 0;
 	}
-	printf("\nMax rate : %.2lf , Max Accuracy:%lf", maxRate, maxAccuracy);
+	printf("\nMax rate : %.2lf , Max F1 : %lf", maxRate, maxF1);
 }
 
 int inference(double a, double rate) {
