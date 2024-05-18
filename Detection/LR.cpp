@@ -46,9 +46,36 @@ int readTxt(Module* Modules) {
 
 void preProcess(Module* Modules) {
 	double MAX[38], MIN[38];
+	double mean[38] = { 0 }, deviation[38] = { 0 };
 	getMinMax(Modules, MAX, MIN);
-	MinMaxScalar(Modules, MAX, MIN);
+	getMeanDeviation(Modules, mean, deviation);
+	//MinMaxScalar(Modules, MAX, MIN);
+	Standardization(Modules, mean, deviation);
 	//shuffleData(Modules);
+}
+
+void getMeanDeviation(Module* Modules, double* mean, double* deviation) {
+	for (int i = 0; i < 38; i++) {
+		for (int j = 0; j < SIZE; j++) {
+			mean[i] += Modules[j].feature[i];
+		}
+		mean[i] /= SIZE;
+	}
+	for (int i = 0; i < 38; i++) {
+		for (int j = 0; j < SIZE; j++) {
+			deviation[i] += (Modules[j].feature[i] - mean[i]) * (Modules[j].feature[i] - mean[i]);
+		}
+		deviation[i] /= SIZE;
+		deviation[i] = sqrt(deviation[i]);
+	}
+}
+
+void Standardization(Module* Modules, double* mean, double* deviation) {
+	for (int i = 0; i < SIZE; i++) {
+		for (int j = 0; j < 38; j++) {
+			Modules[i].feature[j] = (Modules[i].feature[j] - mean[j]) / deviation[j];
+		}
+	}
 }
 
 void getMinMax(Module* Modules, double* MAX, double* MIN) {
@@ -98,7 +125,7 @@ void splitData(Module* Modules, Module* train, Module* test) {
 		test[i - trainSize] = Modules[i];
 }
 
-void train(Module* trainData, double* Weight, double& Bias) {
+void train(Module* trainData, double* Weight, double Bias) {
 	for (int i = 0; i < EPOCH; i++) {
 		double totalLoss = 0;
 		double regLoss = 0;
@@ -131,7 +158,7 @@ void train(Module* trainData, double* Weight, double& Bias) {
 			Weight[k] -= LEARNING_RATE * dw[k];
 		}
 		Bias -= LEARNING_RATE * db;
-		if (i % 1000 == 0) {
+		if (i % 4000 == 0) {
 			printf("epoch : %d , Loss = %lf\n", i, totalLoss);
 		}
 	}

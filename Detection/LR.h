@@ -8,7 +8,7 @@
 #define TRAIN_RATE 0.8
 #define LEARNING_RATE 0.01
 #define LAMBDA 0.01
-#define EPOCH 10000
+#define EPOCH 30000
 
 extern size_t trainSize;
 extern size_t testSize;
@@ -21,13 +21,15 @@ typedef struct
 
 int readTxt(Module*);
 void preProcess(Module*);
+void getMeanDeviation(Module*, double*, double*);
+void Standardization(Module*, double*, double*);
 void getMinMax(Module*, double*, double*);
 void MinMaxScalar(Module*, double*, double*);
 void splitData(Module*, Module*, Module*);
 void shuffleData(Module*);
 void swap(Module*, Module*);
 void splitData(Module*, Module*, Module*);
-void train(Module*, double*, double&);
+void train(Module*, double*, double);
 void predict(Module*, double*, double);
 double sigmoid(double);
 double calculateLogLoss(double, double);
