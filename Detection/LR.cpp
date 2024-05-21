@@ -133,7 +133,7 @@ void train(Module* trainData, double* Weight, double Bias) {
 		double dz = 0, db = 0, dw[38] = { 0 };
 		
 		for (size_t j = 0; j < trainSize; j++) {
-			regLoss = calculateRegLoss(Weight);
+			//regLoss = calculateRegLoss(Weight);
 			z = 0;
 			// forward propagation
 			for (int k = 0; k < 38; k++) {
@@ -147,7 +147,7 @@ void train(Module* trainData, double* Weight, double Bias) {
 			dz = a - trainData[j].defective;
 			db += dz;
 			for (int k = 0; k < 38; k++) {
-				dw[k] += trainData[j].feature[k] * dz + LAMBDA * Weight[k];
+				dw[k] += trainData[j].feature[k] * dz;
 			}
 		}
 
