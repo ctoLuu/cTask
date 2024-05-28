@@ -52,8 +52,16 @@ int readTxt(Module* Modules) {
 
 	// 输出统计结果
 	printf("Total lines read: %d\n", total_lines);
-	printf("Number of 0 is: %d\n", zeroes_count);
-	printf("Number of 1 is: %d\n", ones_count);
+	printf("Number of 0 is: %d ", zeroes_count);
+	for (int nu = 0; nu < zeroes_count / 300; nu++) {
+		printf("█");
+	}
+	printf("\n");
+	printf("Number of 1 is: %d   ", ones_count);
+	for (int nu = 0; nu < ones_count/ 300; nu++) {
+		printf("█");
+	}
+	printf("\n");
 
 	return 1;
 }
@@ -171,6 +179,13 @@ void train(Module* trainData, double* Weight, double Bias) {
 			Weight[k] -= LEARNING_RATE * dw[k];
 		}
 		Bias -= LEARNING_RATE * db;
+		if (i % 1000 == 0) {
+			for (int nu = 0; nu < i / 1000; nu++) {
+				printf("█");
+			}
+			printf("\n");
+		}
+		
 		if (i % 4000 == 0) {
 			printf("epoch : %d , Loss = %lf\n", i, totalLoss);
 		}
