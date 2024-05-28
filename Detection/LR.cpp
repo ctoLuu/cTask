@@ -13,37 +13,50 @@ int readTxt(Module* Modules) {
 	}
 
 	int index = 0;
-	const int line_count = 17001;
+	int total_lines = 0; // 用于统计总行数
+	int zeroes_count = 0; // 0的个数
+	int ones_count = 0; // 1的个数
+
 	char buffer[300];
-	char* ptrBuf = buffer;
-	while (index < line_count && fgets(buffer, sizeof(buffer), file)) {
-		ptrBuf = buffer;
-		int parased_items;
+	while (fgets(buffer, sizeof(buffer), file) && index < 17001) {
+		total_lines++; // 增加行数计数
+		char* ptrBuf = buffer;
+		int parsed_items;
 		for (int i = 0; i < 38; ++i) {
-			parased_items = sscanf(ptrBuf, "%lf", &Modules[index].feature[i]);
-			if (parased_items != 1) {
-				fprintf(stderr, "Error reading data at line %ld, dimension %d\n", index + 1, i);
+			parsed_items = sscanf(ptrBuf, "%lf", &Modules[index].feature[i]);
+			if (parsed_items != 1) {
+				fprintf(stderr, "Error reading data at line %d, dimension %d\n", total_lines, i);
+				fclose(file);
 				return 0;
 			}
-			char* ptr = ptrBuf;
-			while (*ptr != ',' && *ptr != '\0')
-				ptr++;
-			while (*ptr == ',')
-				ptr++;
-			ptrBuf = ptr;
+			while (*ptrBuf != ',' && *ptrBuf != '\0') ptrBuf++;
+			while (*ptrBuf == ',') ptrBuf++;
 		}
-		parased_items = sscanf(ptrBuf, "%d", &Modules[index].defective);
-		if (parased_items != 1) {
-			fprintf(stderr, "Error reading data at line %ld, dimension 39\n", index + 1);
+		parsed_items = sscanf(ptrBuf, "%d", &Modules[index].defective);
+		if (parsed_items != 1) {
+			fprintf(stderr, "Error reading data at line %d, dimension 39\n", total_lines);
+			fclose(file);
 			return 0;
+		}
+		// 统计最后一个数据是0还是1
+		if (Modules[index].defective == 0) {
+			zeroes_count++;
+		}
+		else if (Modules[index].defective == 1) {
+			ones_count++;
 		}
 		index++;
 	}
 
 	fclose(file);
+
+	// 输出统计结果
+	printf("Total lines read: %d\n", total_lines);
+	printf("Number of 0 is: %d\n", zeroes_count);
+	printf("Number of 1 is: %d\n", ones_count);
+
 	return 1;
 }
-
 void preProcess(Module* Modules) {
 	double MAX[38], MIN[38];
 	double mean[38] = { 0 }, deviation[38] = { 0 };
